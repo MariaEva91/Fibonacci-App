@@ -7,15 +7,15 @@ class App extends Component {
 
     this.state = {
       input: '',
-      fibonacci: ''
-
-
+      fibonacciSiguiente: '',
+      fibonacciAnterior: '',
+      numeroDeLaSerie: ''
     }
+
     this.handleInputOnChange = this.handleInputOnChange.bind(this);
-    this.anterior = this.anterior.bind(this);
-    this.error = this.error.bind(this);
-    this.fibonacci = this.fibonacci.bind(this);
-    this.siguiente = this.siguiente.bind(this);
+    this.fibonacciAnterior = this.fibonacciAnterior.bind(this);
+    this.fibonacciSiguiente = this.fibonacciSiguiente.bind(this);
+
   }
 
   //function input value
@@ -26,38 +26,61 @@ class App extends Component {
     })
   }
 
-  //operations
-
-  error() {
-    if (this.state.input < 0) {
-      alert('No existe. Debe ingresar un número mayor a 0');
-    }
-  }
-  // fibonacci serie. This function calculate the next number
-
-  fibonacci() {
-    let fibonacci = [0, 1]
-
-    for (let i = 1; i < 100; i++) {
-      let suma = fibonacci[i] + fibonacci[i - 1];
-      fibonacci.push(suma);
-    }
-    this.setState({
-      fibonacci: fibonacci
-    })
-    console.log(fibonacci);
-  }
-
-  //function previous number
-  anterior() {
-
-  }
 
   //function next number
 
-  siguiente() {
+  fibonacciSiguiente() {
+    if (this.state.input < 0) {
+      alert('No existe. Debe ingresar un número mayor a 0');
+    };
+    if (this.state.input == '') {
+      alert('Debe ingresar un número')
+    };
+
+    let fibonacci = [0, 1]
+    //calcular fibonacci hasta llegar al mayor despues del que ingreso el usuario
+    for (let i = 1; fibonacci[fibonacci.length - 1] <= this.state.input; i++) {
+      let suma = fibonacci[i] + fibonacci[i - 1];
+      fibonacci.push(suma);
+    }
+    //separar el ultimo elemento del array para mostrarlo
+    let numeroSiguiente = fibonacci[fibonacci.length - 1];
+
+    this.setState({
+      fibonacciSiguiente: numeroSiguiente,
+      numeroDeLaSerie: 'siguiente'
+
+    })
 
   }
+
+
+  //function previous number
+
+  fibonacciAnterior() {
+    if (this.state.input == '') {
+      alert('Debe ingresar un número')
+    };
+    if (this.state.input < 0) {
+      alert('No existe. Debe ingresar un número mayor a 0');
+    };
+
+    let fibonacci = [0, 1]
+
+    for (let i = 1; fibonacci[fibonacci.length - 1] < this.state.input; i++) {
+      let suma = fibonacci[i] + fibonacci[i - 1];
+      fibonacci.push(suma);
+    }
+    //separar el anteultimo elemento del array para mostrarlo
+    let numeroAnterior = fibonacci[fibonacci.length - 2];
+
+    this.setState({
+      fibonacciAnterior: numeroAnterior,
+      numeroDeLaSerie: 'anterior'
+    })
+
+  }
+
 
 
 
@@ -72,11 +95,11 @@ class App extends Component {
           onChange={this.handleInputOnChange}></input></div>
 
         <button
-          onClick={this.anterior}
-          onClick={this.error}>Anterior</button>
+          onClick={this.fibonacciAnterior}>Anterior</button>
         <button
-          onClick={this.fibonacci} onClick={this.siguiente}>Siguiente</button>
-        <div>{this.state.input}</div>
+          onClick={this.fibonacciSiguiente}>Siguiente</button>
+
+        <div>El número {this.state.numeroDeLaSerie} es: {this.state.fibonacciSiguiente} {this.state.fibonacciAnterior}</div>
       </div>
     );
   }
